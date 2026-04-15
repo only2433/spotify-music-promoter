@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.firebase/
+*.log
+pitch_pages/
+uploads/
+backend/serviceAccountKey.json

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pitch Promo Engine Monitor</title>
+    <style>
+        body {
+            background: #0a0a0c;
+            color: #fff;
+            font-family: -apple-system, sans-serif;
+            padding: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        .status-completed {
+            color: #1DB954;
+            font-weight: bold;
+        }
+
+        .status-error {
+            color: #ff4444;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            color: #ffaa00;
+            font-weight: bold;
+        }
+
+        .timestamp {
+            font-size: 11px;
+            opacity: 0.5;
+        }
+
+        .log {
+            margin-top: 8px;
+            font-family: monospace;
+            background: #000;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #ccc;
+            overflow-wrap: break-word;
+        }
+
+        h1 {
+            font-weight: 800;
+            color: #1DB954;
+            margin-bottom: 30px;
+        }
+
+        #refresh-btn {
+            padding: 10px 20px;
+            background: #1DB954;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🛰️ CLOUD MONITOR</h1>
+    <button id="refresh-btn" onclick="fetchTasks()">RECORDS REFRESH</button>
+    <div id="tasks-container">Loading latest tasks...</div>
+
+    <script>
+        async function fetchTasks() {
+            const container = document.getElementById('tasks-container');
+            container.innerHTML = 'Fetching records from Cloud...';
+
+            const PROJECT_ID = 'pitch-promo-xyz-1234';
+            const BASE_URL = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+
+            const query = {
+                "structuredQuery": {
+                    "from": [{ "collectionId": "promo_tasks" }],
+                    "orderBy": [{ "field": { "fieldPath": "created_at" }, "direction": "DESCENDING" }],
+                    "limit": 30
+                }
+            };
+
+            try {
+                const res = await fetch(`${BASE_URL}:runQuery`, {
+                    method: 'POST',
+                    body: JSON.stringify(query)
+                });
+                const data = await res.json();
+
+                container.innerHTML = '';
+
+                data.forEach(item => {
+                    const doc = item.document;
+                    if (!doc) return;
+
+                    const f = doc.fields;
+                    const type = f.type ? f.type.stringValue : 'Unknown';
+                    const status = f.status ? f.status.stringValue : 'Unknown';
+                    const log = f.log ? f.log.stringValue : 'N/A';
+                    const time = f.created_at ? f.created_at.stringValue : doc.createTime;
+
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-weight: bold; font-size: 16px;">[${type.toUpperCase()}]</span>
+                            <span class="status-${status}">${status.toUpperCase()}</span>
+                        </div>
+                        <div class="timestamp">${new Date(time).toLocaleString()}</div>
+                        <div class="log">RESULT: ${log}</div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (e) {
+                container.innerHTML = '<div class="card status-error">Cloud Connection Error. Check console.</div>';
+                console.error(e);
+            }
+        }
+
+        fetchTasks();
+    </script>
+</body>
+
+</html>
