@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ track_title }} - {{ artist_name }}</title>
+</head>
+
+<body
+    style="font-family: Helvetica, Arial, sans-serif; background-color: #0a0a0a; color: #ffffff; margin: 0; padding: 30px 10px; text-align: center;">
+
+    <div
+        style="max-width: 480px; margin: 0 auto; background-color: #181818; border-radius: 16px; border: 1px solid #2a2a2a; overflow: hidden;">
+
+        <!-- Header Banner -->
+        <div
+            style="background: linear-gradient(135deg, #1DB954 0%, #158a3e 100%); padding: 18px 20px; text-align: left;">
+            <span
+                style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #fff; opacity: 0.85;">🎵
+                New Music Submission</span>
+        </div>
+
+        <!-- Album Art — small, centered, clean -->
+        <div style="padding: 30px 20px 20px; text-align: center;">
+            <img src="{{ cover_image }}" alt="Album Art"
+                style="width: 160px; height: 160px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.6); object-fit: cover; display: inline-block; border: 2px solid #333;">
+        </div>
+
+        <!-- Track Info -->
+        <div style="padding: 0 30px 20px; text-align: center;">
+            <h1 style="font-size: 22px; margin: 0 0 6px; color: #ffffff; font-weight: 700;">{{ track_title }}</h1>
+            <p style="font-size: 15px; color: #b3b3b3; margin: 0 0 12px; font-weight: 500;">{{ artist_name }}</p>
+            <span
+                style="background: #2a2a2a; color: #1DB954; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 1px;">{{
+                genre }}</span>
+        </div>
+
+        <!-- Divider -->
+        <div style="border-top: 1px solid #2a2a2a; margin: 0 30px;"></div>
+
+        <!-- Pitch Message -->
+        <div style="padding: 20px 30px; text-align: left;">
+            <p style="font-size: 14px; line-height: 1.7; color: #cccccc; margin: 0 0 10px;">Hi,</p>
+            <p style="font-size: 14px; line-height: 1.7; color: #cccccc; margin: 0 0 10px;">
+                I'd like to submit my latest track <strong style="color: #fff;">{{ track_title }}</strong> for your
+                playlist consideration.
+                It's a <strong style="color: #1DB954;">{{ genre }}</strong> track with strong composition and emotional
+                storytelling that I believe would be a great fit for your listeners.
+            </p>
+            <p style="font-size: 14px; line-height: 1.7; color: #cccccc; margin: 0;">
+                Please click the button below to view the full press kit and <strong style="color: #fff;">listen on
+                    Spotify</strong>:
+            </p>
+        </div>
+
+        <!-- Fake Player (clickable → pitch page) -->
+        <div
+            style="margin: 0 20px 20px; background: #242424; border-radius: 12px; border: 1px solid #333; overflow: hidden;">
+            <a href="{{ pitch_url }}" target="_blank"
+                style="text-decoration: none; display: flex; align-items: center; padding: 14px 16px;">
+                <!-- Play Icon -->
+                <div
+                    style="width: 42px; height: 42px; background: #1DB954; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 14px;">
+                    <span style="color: white; font-size: 16px; padding-left: 3px;">▶</span>
+                </div>
+                <div style="flex: 1; text-align: left;">
+                    <div style="font-size: 14px; color: #ffffff; font-weight: 700; margin-bottom: 4px;">{{ track_title
+                        }} — Preview</div>
+                    <div style="font-size: 12px; color: #888;">Click to open Pitch Page &amp; Spotify 🎧</div>
+                    <!-- Progress Bar -->
+                    <div style="width: 100%; height: 3px; background: #444; margin-top: 8px; border-radius: 2px;">
+                        <div style="width: 40%; height: 3px; background: #1DB954; border-radius: 2px;"></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- CTA Button -->
+        <div style="padding: 0 30px 30px; text-align: center;">
+            <a href="{{ pitch_url }}" target="_blank"
+                style="display: inline-block; background-color: #1DB954; color: #ffffff; text-decoration: none; font-weight: 700; font-size: 15px; padding: 14px 36px; border-radius: 50px; letter-spacing: 0.5px;">
+                🎵 View Pitch Page &amp; Listen
+            </a>
+        </div>
+
+        <!-- Footer -->
+        <div
+            style="background: #111; padding: 16px 30px; font-size: 11px; color: #555; text-align: center; border-top: 1px solid #222;">
+            This is a personal music submission. You received this because you curate playlists in similar genres.
+        </div>
+    </div>
+
+</body>
+
+</html>
