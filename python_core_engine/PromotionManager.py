@@ -298,7 +298,7 @@ class EmailPreviewWindow:
         emails = [self.tree.item(child)['values'][1] for child in self.tree.get_children()]
         if emails:
             self.window.clipboard_clear()
-            self.window.clipboard_append("; ".join(emails))
+            self.window.clipboard_append(", ".join(emails))
             messagebox.showinfo("Copied", f"Copied {len(emails)} emails!")
 
     def copy_message(self):

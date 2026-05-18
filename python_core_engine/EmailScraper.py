@@ -182,17 +182,17 @@ class SpotifyEmailScraper:
                 self._scrape_spotify(genres, collected, max_count, cb)
             cb(f"  → 현재 수집: {len(collected)}개")
 
-        # ③ 큐레이터 제출 사이트 직접 스크래핑
-        if len(collected) < max_count:
-            cb("🌐 [STEP 3/4] 큐레이터 사이트 스크래핑...")
-            self._scrape_curator_sites(genres, collected, max_count, cb)
-            cb(f"  → 현재 수집: {len(collected)}개")
+        # ③ 큐레이터 제출 사이트 직접 스크래핑 (무작위 웹사이트 메일 수집 방지를 위해 비활성화)
+        # if len(collected) < max_count:
+        #     cb("🌐 [STEP 3/4] 큐레이터 사이트 스크래핑 (비활성화됨)...")
+        #     # self._scrape_curator_sites(genres, collected, max_count, cb)
+        #     cb(f"  → 현재 수집: {len(collected)}개")
 
-        # ④ 검색 엔진 폴백
-        if len(collected) < max_count:
-            cb("🔍 [STEP 4/4] 검색 엔진 스캔...")
-            self._scrape_search_engines(genres, collected, max_count, cb)
-            cb(f"  → 현재 수집: {len(collected)}개")
+        # ④ 검색 엔진 폴백 (구글/빙 검색결과에 섞인 무작위 메일 수집 방지를 위해 비활성화)
+        # if len(collected) < max_count:
+        #     cb("🔍 [STEP 4/4] 검색 엔진 스캔 (비활성화됨)...")
+        #     # self._scrape_search_engines(genres, collected, max_count, cb)
+        #     cb(f"  → 현재 수집: {len(collected)}개")
 
         results = list(collected.values())
         cb(f"✅ 최종 수집 완료: {len(results)}개")
