@@ -29,18 +29,13 @@ if sys.platform == "win32":
 
 # Paths
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-RESEARCH_ROOT = os.path.dirname(BASE_DIR)
-PROMOTER_DIR = os.path.join(RESEARCH_ROOT, "research_app", "music_promoter")
-sys.path.append(PROMOTER_DIR)
+PYTHON_CORE_DIR = os.path.join(BASE_DIR, "python_core_engine")
+sys.path.append(PYTHON_CORE_DIR)
 
-try:
-    from EmailScraper import SpotifyEmailScraper
-except ImportError:
-    import shutil
-    shutil.copy(os.path.join(PROMOTER_DIR, "EmailScraper.py"), os.path.join(os.getcwd(), "EmailScraper.py"))
-    from EmailScraper import SpotifyEmailScraper
+from EmailScraper import SpotifyEmailScraper
 
 app = FastAPI(title="Spotify Promoter Bridge API")
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -72,10 +67,10 @@ try:
 except Exception as e:
     print(f"Firebase Init Error: {e}. Please place 'serviceAccountKey.json' in backend folder.")
 
-CONFIG_PATH = os.path.join(PROMOTER_DIR, "spotify_config.json")
+CONFIG_PATH = os.path.join(PYTHON_CORE_DIR, "spotify_config.json")
 UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
 PITCH_DIR = os.path.join(BASE_DIR, "pitch_pages")
-FIREBASE_PUBLIC_DIR = os.path.join(PROMOTER_DIR, "firebase_deploy", "public")
+FIREBASE_PUBLIC_DIR = os.path.join(BASE_DIR, "public")
 FIREBASE_PUBLIC_HOST = "https://pitch-promo-xyz-0727.web.app"
 
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -85,9 +80,8 @@ os.makedirs(FIREBASE_PUBLIC_DIR, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 app.mount("/pitch_pages", StaticFiles(directory=PITCH_DIR), name="pitch_pages")
 
-TEMPLATE_DIR = os.path.join(PROMOTER_DIR, "templates")
-# Use the spotify-specific template we created earlier
-jinja_env = Environment(loader=FileSystemLoader(os.path.join(RESEARCH_ROOT, "spotify_promoter", "templates") if os.path.exists(os.path.join(RESEARCH_ROOT, "spotify_promoter", "templates")) else TEMPLATE_DIR))
+TEMPLATE_DIR = os.path.join(PYTHON_CORE_DIR, "templates")
+jinja_env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
 
 API_BASE_URL = "http://127.0.0.1:8000"
 
@@ -178,10 +172,9 @@ def run_spotify_task(doc_id: str, data: dict):
 def generate_pitch_logic(data: dict):
     # This is a simplified version of the logic in the original main.py adapted for Spotify
     try:
-        template_path = os.path.join(RESEARCH_ROOT, "spotify_promoter", "templates", "pitch_template.html")
+        template_path = os.path.join(TEMPLATE_DIR, "pitch_template.html")
         if not os.path.exists(template_path):
-            # Fallback to music_promoter template if needed
-            template_path = os.path.join(PROMOTER_DIR, "templates", "pitch_template.html")
+            raise FileNotFoundError(f"Template not found at {template_path}")
             
         with open(template_path, "r", encoding="utf-8") as f:
             template_str = f.read()

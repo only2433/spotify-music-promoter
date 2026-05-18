@@ -253,18 +253,15 @@ class SpotifyEmailScraper:
             if len(collected) >= max_count:
                 break
 
-            # 더 다양하고 많은 쿼리 (이메일 노출 가능성 높은 것들)
-            # 불필요한 플랫폼 메일 배제를 위해 마이너스 키워드 활용
+            # Spotify API search doesn't support complex operators well like -support.
+            # Using simple keywords yields much better playlist matches.
             queries = [
-                f'"{genre}" submit music email -support -wix -squarespace',
-                f'"{genre}" playlist curator email -no-reply',
-                f'{genre} music blog contact email -marketing',
-                f'{genre} playlist submission gmail.com',
-                f'submit {genre} music "reach me" -info',
-                f'{genre} curator contact "{genre} playlist"',
-                f'{genre} demo submission email',
-                f'playlist {genre} email contact curator',
-                f'"{genre}" independent music curator email',
+                f'{genre} submissions',
+                f'{genre} submit',
+                f'{genre} playlist curators',
+                f'{genre} send music',
+                f'{genre} demo',
+                f'{genre} email'
             ]
 
             for query in queries:
@@ -274,7 +271,7 @@ class SpotifyEmailScraper:
                     res = self.session.get(
                         "https://api.spotify.com/v1/search",
                         headers=headers,
-                        params={'q': query, 'type': 'playlist', 'limit': 50},
+                        params={'q': query, 'type': 'playlist', 'limit': 10},
                         timeout=10
                     )
 
