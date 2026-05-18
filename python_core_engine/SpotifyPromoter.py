@@ -45,13 +45,14 @@ def get_spotify_token(client_id, client_secret):
     auth_string = f"{client_id}:{client_secret}"
     auth_base64 = base64.b64encode(auth_string.encode("utf-8")).decode("utf-8")
     url = "https://accounts.spotify.com/api/token"
-    headers = {"Authorization": "Basic " + auth_base64, "Content-Type": "application/x-form-urlencoded"}
+    headers = {"Authorization": "Basic " + auth_base64, "Content-Type": "application/x-www-form-urlencoded"}
     data = {"grant_type": "client_credentials"}
     res = requests.post(url, headers=headers, data=data, verify=False)
     return res.json().get("access_token")
 
 def search_spotify_track(query, token):
-    url = f"https://api.spotify.com/v1/search?q={query}&type=track&limit=1"
+    query_encoded = requests.utils.quote(query)
+    url = f"https://api.spotify.com/v1/search?q={query_encoded}&type=track&limit=1"
     headers = {"Authorization": "Bearer " + token}
     res = requests.get(url, headers=headers, verify=False)
     items = res.json().get("tracks", {}).get("items", [])

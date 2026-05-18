@@ -5,3 +5,5 @@ dist/
 pitch_pages/
 uploads/
 backend/serviceAccountKey.json
+spotify_config.json
+*config*.json
